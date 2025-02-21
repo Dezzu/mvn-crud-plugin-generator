@@ -1,2 +1,7 @@
+it/fabiodezuani/utils/GeneratorUtil.class
+it/fabiodezuani/generator/DtoGenerator.class
 it/fabiodezuani/CrudGeneratorMojo.class
-it/fabiodezuani/GeneratorUtils.class
+it/fabiodezuani/generator/RepositoryGenerator.class
+it/fabiodezuani/generator/ServiceGenerator.class
+it/fabiodezuani/generator/MapperGenerator.class
+it/fabiodezuani/generator/ControllerGenerator.class

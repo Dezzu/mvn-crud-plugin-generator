@@ -57,12 +57,52 @@
           <editable>true</editable>
           <description></description>
         </parameter>
+        <parameter>
+          <name>skipController</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>skipDto</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>skipMapper</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>skipRepository</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>skipService</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
       </parameters>
       <configuration>
         <modelClass implementation="java.lang.String">${modelClass}</modelClass>
         <outputDir implementation="java.lang.String" default-value="${project.basedir}/src/main/java"/>
         <project implementation="org.apache.maven.project.MavenProject" default-value="${project}"/>
         <rootPackage implementation="java.lang.String">${rootPackage}</rootPackage>
+        <skipController implementation="boolean">${skipController}</skipController>
+        <skipDto implementation="boolean">${skipDto}</skipDto>
+        <skipMapper implementation="boolean">${skipMapper}</skipMapper>
+        <skipRepository implementation="boolean">${skipRepository}</skipRepository>
+        <skipService implementation="boolean">${skipService}</skipService>
       </configuration>
     </mojo>
   </mojos>
