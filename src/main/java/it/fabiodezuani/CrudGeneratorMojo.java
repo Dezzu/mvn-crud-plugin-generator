@@ -2,6 +2,7 @@ package it.fabiodezuani;
 
 import com.squareup.javapoet.*;
 import it.fabiodezuani.generator.*;
+import it.fabiodezuani.model.MapperEnum;
 import it.fabiodezuani.utils.GeneratorUtil;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -39,6 +40,9 @@ public class CrudGeneratorMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project.basedir}/src/main/java")
     private String outputDir;
+
+    @Parameter(property = "mapper", defaultValue = "MAPSTRUCT")
+    private MapperEnum mapper;
     
     @Parameter(property = "skipDto")
     private boolean skipDto;
@@ -82,7 +86,7 @@ public class CrudGeneratorMojo extends AbstractMojo {
             logger.info("📌 Generating DTOs...");
             dtoGenerator.generate(rootPackage, entityClass, entityName, skipDto);
             logger.info("📌 Generating Mapper...");
-            mapperGenerator.generate(rootPackage, entityName, skipMapper);
+            mapperGenerator.generate(rootPackage, entityName, skipMapper, mapper);
             logger.info("📌 Generating Repository...");
             repositoryGenerator.generate(rootPackage, entityName, skipRepository);
             logger.info("📌 Generating Services...");

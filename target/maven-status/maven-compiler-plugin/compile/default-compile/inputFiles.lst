@@ -4,4 +4,5 @@
 /Users/dezzu/Progetti/java/mvn-crud-generator/src/main/java/it/fabiodezuani/generator/MapperGenerator.java
 /Users/dezzu/Progetti/java/mvn-crud-generator/src/main/java/it/fabiodezuani/generator/RepositoryGenerator.java
 /Users/dezzu/Progetti/java/mvn-crud-generator/src/main/java/it/fabiodezuani/generator/ServiceGenerator.java
+/Users/dezzu/Progetti/java/mvn-crud-generator/src/main/java/it/fabiodezuani/model/MapperEnum.java
 /Users/dezzu/Progetti/java/mvn-crud-generator/src/main/java/it/fabiodezuani/utils/GeneratorUtil.java
