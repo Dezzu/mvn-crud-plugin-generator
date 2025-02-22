@@ -1,9 +1,0 @@
-it/fabiodezuani/utils/GeneratorUtil.class
-it/fabiodezuani/model/MapperEnum.class
-it/fabiodezuani/generator/DtoGenerator.class
-it/fabiodezuani/CrudGeneratorMojo.class
-it/fabiodezuani/generator/MapperGenerator$1.class
-it/fabiodezuani/generator/RepositoryGenerator.class
-it/fabiodezuani/generator/ServiceGenerator.class
-it/fabiodezuani/generator/MapperGenerator.class
-it/fabiodezuani/generator/ControllerGenerator.class

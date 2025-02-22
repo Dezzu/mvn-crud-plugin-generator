@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Maven Plugin to generate CRUD services with DTOs and MapStruct.
@@ -73,8 +74,30 @@ public class CrudGeneratorMojo extends AbstractMojo {
             logger.info("🔍 Attempting to load the entity class...");
             ClassLoader projectClassLoader = getClassLoader();
             Class<?> entityClass = projectClassLoader.loadClass(rootPackage + "." + modelClass);
+            List<Class<?>> joinedEntities = new ArrayList<>();
 
             logger.info("✅ Model class successfully loaded: {}", entityClass.getName());
+
+            // Extract joined entities from fields
+            for (Field field : entityClass.getDeclaredFields()) {
+                if (!field.getType().getPackageName().startsWith("java")) {
+                    // Direct entity reference
+                    joinedEntities.add(field.getType());
+                } else if (field.getGenericType() instanceof java.lang.reflect.ParameterizedType paramType) {
+                    // Handle collections and maps
+                    if (List.class.isAssignableFrom((Class<?>) paramType.getRawType())) {
+                        Class<?> listType = (Class<?>) paramType.getActualTypeArguments()[0];
+                        if (!listType.getPackageName().startsWith("java")) {
+                            joinedEntities.add(listType);
+                        }
+                    } else if (Map.class.isAssignableFrom((Class<?>) paramType.getRawType())) {
+                        Class<?> valueType = (Class<?>) paramType.getActualTypeArguments()[1];
+                        if (!valueType.getPackageName().startsWith("java")) {
+                            joinedEntities.add(valueType);
+                        }
+                    }
+                }
+            }
 
             String packageName = entityClass.getPackage().getName();
             String entityName = entityClass.getSimpleName();
@@ -82,11 +105,12 @@ public class CrudGeneratorMojo extends AbstractMojo {
             logger.info("📌 Root package: {}", rootPackage);
             logger.info("📌 Package name: {}", packageName);
             logger.info("📌 Entity name: {}", entityName);
+            logger.info("📌 Found {} joined entities", joinedEntities.size());
 
             logger.info("📌 Generating DTOs...");
             dtoGenerator.generate(rootPackage, entityClass, entityName, skipDto);
             logger.info("📌 Generating Mapper...");
-            mapperGenerator.generate(rootPackage, entityName, skipMapper, mapper);
+            mapperGenerator.generate(rootPackage, entityName, joinedEntities, skipMapper, mapper);
             logger.info("📌 Generating Repository...");
             repositoryGenerator.generate(rootPackage, entityName, skipRepository);
             logger.info("📌 Generating Services...");
