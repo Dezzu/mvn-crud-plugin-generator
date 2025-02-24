@@ -78,30 +78,6 @@ public class MapperGenerator {
                 .addParameter(utils.getDtoPackage(packageName, entityName), "dto")
                 .build());
 
-        // Add @AfterMapping method for each dependency
-        for (String dependency : joinedEntities) {
-            if (!dependency.equals(entityName)) {
-                String fieldName = dependency.toLowerCase();
-                MethodSpec afterMapping = MethodSpec.methodBuilder("set" + entityName + "In" + dependency)
-                        .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
-                        .addAnnotation(ClassName.get("org.mapstruct", "AfterMapping"))
-                        .addParameter(ParameterSpec.builder(utils.getModelPackage(packageName, entityName), entityName.toLowerCase())
-                                .addAnnotation(ClassName.get("org.mapstruct", "MappingTarget"))
-                                .build())
-                        .beginControlFlow("if ($L.get$L() != null)", entityName.toLowerCase(), dependency)
-                        .addStatement("$L.get$L().forEach($L -> $L.set$L($L))",
-                                entityName.toLowerCase(), dependency,
-                                fieldName.substring(0, 1),
-                                fieldName.substring(0, 1),
-                                entityName,
-                                entityName.toLowerCase())
-                        .endControlFlow()
-                        .build();
-
-                mapperBuilder.addMethod(afterMapping);
-            }
-        }
-
         TypeSpec mapper = mapperBuilder.build();
         utils.saveJavaFile(packageName + ".mapper", mapper);
     }
