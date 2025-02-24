@@ -47,6 +47,26 @@ public class DtoGenerator {
                 .build();
 
         utils.saveJavaFile(packageName + ".dto", paginationRequestDto);
+
+        TypeSpec baseResponseDto = TypeSpec.classBuilder("BaseResponseDto")
+                        .addAnnotation(ClassName.get("lombok", "Data"))
+                        .addAnnotation(ClassName.get("lombok", "AllArgsConstructor"))
+                        .addTypeVariable(TypeVariableName.get("T"))
+                        .addModifiers(Modifier.PUBLIC)
+                        .addField(FieldSpec.builder(Boolean.class, "success", Modifier.PRIVATE)
+                                .initializer("true")
+                                .build())
+                        .addField(FieldSpec.builder(String.class, "message", Modifier.PRIVATE).build())
+                        .addField(FieldSpec.builder(TypeVariableName.get("T"), "data", Modifier.PRIVATE).build())
+                        .addMethod(MethodSpec.constructorBuilder()
+                                .addModifiers(Modifier.PUBLIC)
+                                .addParameter(TypeVariableName.get("T"), "data")
+                                .addStatement("this.data = data")
+                                .addStatement("this.success = true")
+                                .build())
+                        .build();
+
+        utils.saveJavaFile(packageName + ".dto", baseResponseDto);
     }
 
     private void generateDto(String packageName, Class<?> entityClass, String entityName) throws IOException {

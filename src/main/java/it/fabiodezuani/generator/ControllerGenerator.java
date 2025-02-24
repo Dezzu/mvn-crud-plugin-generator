@@ -57,20 +57,20 @@ public class ControllerGenerator {
                 .addMethod(MethodSpec.methodBuilder("getAll")
                         .addAnnotation(ClassName.get("org.springframework.web.bind.annotation", "GetMapping"))
                         .addModifiers(Modifier.PUBLIC)
-                        .returns(ParameterizedTypeName.get(ClassName.get("org.springframework.data.domain", "Page"), utils.getDtoPackage(packageName, entityName)))
+                        .returns(ParameterizedTypeName.get(ClassName.get("org.springframework.http", "ResponseEntity"), ParameterizedTypeName.get(utils.getDtoClassName(packageName, "BaseResponseDto"), ParameterizedTypeName.get(ClassName.get("org.springframework.data.domain", "Page"), utils.getDtoPackage(packageName, entityName)))))
                         .addParameter(ParameterSpec.builder(utils.getDtoClassName(packageName, "PaginationRequestDto"), "pageRequest").build())
-                        .addStatement("return service.findAll(pageRequest)")
+                        .addStatement("return $T.ok(new BaseResponseDto<>(service.findAll(pageRequest)))", ClassName.get("org.springframework.http", "ResponseEntity"))
                         .build())
 
                 // Create (POST)
                 .addMethod(MethodSpec.methodBuilder("create")
                         .addAnnotation(ClassName.get("org.springframework.web.bind.annotation", "PostMapping"))
                         .addModifiers(Modifier.PUBLIC)
-                        .returns(utils.getDtoPackage(packageName, entityName))
+                        .returns(ParameterizedTypeName.get(ClassName.get("org.springframework.http", "ResponseEntity"), ParameterizedTypeName.get(utils.getDtoClassName(packageName, "BaseResponseDto"), utils.getDtoPackage(packageName, entityName))))
                         .addParameter(ParameterSpec.builder(utils.getDtoPackage(packageName, entityName), "dto")
                                 .addAnnotation(ClassName.get("org.springframework.web.bind.annotation", "RequestBody"))
                                 .build())
-                        .addStatement("return service.save(dto)")
+                        .addStatement("return ResponseEntity.ok(new BaseResponseDto<>(service.save(dto)))")
                         .build())
 
 
@@ -79,7 +79,7 @@ public class ControllerGenerator {
                         .addAnnotation(AnnotationSpec.builder(ClassName.get("org.springframework.web.bind.annotation", "PutMapping"))
                                 .addMember("value", "$S", "/{id}")
                                 .build()).addModifiers(Modifier.PUBLIC)
-                        .returns(utils.getDtoPackage(packageName, entityName))
+                        .returns(ParameterizedTypeName.get(ClassName.get("org.springframework.http", "ResponseEntity"), ParameterizedTypeName.get(utils.getDtoClassName(packageName, "BaseResponseDto"), utils.getDtoPackage(packageName, entityName))))
                         .addParameter(ParameterSpec.builder(
                                         Long.class, "id"
                                 )
@@ -89,7 +89,7 @@ public class ControllerGenerator {
                         .addParameter(ParameterSpec.builder(utils.getDtoPackage(packageName, entityName), "dto")
                                 .addAnnotation(ClassName.get("org.springframework.web.bind.annotation", "RequestBody"))
                                 .build())
-                        .addStatement("return service.update(id, dto)")
+                        .addStatement("return ResponseEntity.ok(new BaseResponseDto<>(service.update(id, dto)))")
                         .build())
 
 
