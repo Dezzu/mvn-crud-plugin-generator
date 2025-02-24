@@ -1,9 +1,6 @@
 package it.fabiodezuani.generator;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import it.fabiodezuani.utils.GeneratorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +27,26 @@ public class DtoGenerator {
             return;
         }
 
+        generateCommonDtos(packageName);
         generateDto(packageName, entityClass, entityName);
+    }
+
+    private void generateCommonDtos(String packageName) throws IOException {
+        TypeSpec paginationRequestDto = TypeSpec.classBuilder("PaginationRequestDto")
+                .addAnnotation(ClassName.get("lombok", "RequiredArgsConstructor"))
+                .addAnnotation(ClassName.get("lombok", "Data"))
+                .addModifiers(Modifier.PUBLIC)
+                .addField(FieldSpec.builder(Integer.class, "pageNumber", Modifier.PRIVATE).build())
+                .addField(FieldSpec.builder(Integer.class, "pageSize", Modifier.PRIVATE).build())
+                .addMethod(MethodSpec.methodBuilder("toPageRequest")
+                        .addModifiers(Modifier.PUBLIC)
+                        .returns(ClassName.get("org.springframework.data.domain", "PageRequest"))
+                        .addStatement("return $T.of(pageNumber, pageSize)",
+                                ClassName.get("org.springframework.data.domain", "PageRequest"))
+                        .build())
+                .build();
+
+        utils.saveJavaFile(packageName + ".dto", paginationRequestDto);
     }
 
     private void generateDto(String packageName, Class<?> entityClass, String entityName) throws IOException {

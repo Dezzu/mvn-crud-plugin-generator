@@ -57,8 +57,9 @@ public class ControllerGenerator {
                 .addMethod(MethodSpec.methodBuilder("getAll")
                         .addAnnotation(ClassName.get("org.springframework.web.bind.annotation", "GetMapping"))
                         .addModifiers(Modifier.PUBLIC)
-                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), utils.getDtoPackage(packageName, entityName)))
-                        .addStatement("return service.findAll()")
+                        .returns(ParameterizedTypeName.get(ClassName.get("org.springframework.data.domain", "Page"), utils.getDtoPackage(packageName, entityName)))
+                        .addParameter(ParameterSpec.builder(utils.getDtoClassName(packageName, "PaginationRequestDto"), "pageRequest").build())
+                        .addStatement("return service.findAll(pageRequest)")
                         .build())
 
                 // Create (POST)

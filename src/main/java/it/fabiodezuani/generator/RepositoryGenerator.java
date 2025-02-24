@@ -29,8 +29,13 @@ public class RepositoryGenerator {
         TypeSpec repository = TypeSpec.interfaceBuilder(entityName + "Repository")
                 .addModifiers(Modifier.PUBLIC)
                 .addSuperinterface(ParameterizedTypeName.get(
+                        ClassName.get("org.springframework.data.repository", "PagingAndSortingRepository"),
+                        utils.getModelPackage(packageName, entityName),
+                        ClassName.get(Long.class)
+                ))
+                .addSuperinterface(ParameterizedTypeName.get(
                         ClassName.get("org.springframework.data.jpa.repository", "JpaRepository"),
-                        ClassName.get(packageName + ".model", entityName),
+                        utils.getModelPackage(packageName, entityName),
                         ClassName.get(Long.class)
                 ))
                 .build();

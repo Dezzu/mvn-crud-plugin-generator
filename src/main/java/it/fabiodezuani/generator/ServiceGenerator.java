@@ -1,9 +1,6 @@
 package it.fabiodezuani.generator;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import it.fabiodezuani.utils.GeneratorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +40,10 @@ public class ServiceGenerator {
                 // Find all
                 .addMethod(MethodSpec.methodBuilder("findAll")
                         .addModifiers(Modifier.PUBLIC)
-                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), dto))
+                        .returns(ParameterizedTypeName.get(ClassName.get("org.springframework.data.domain", "Page"), dto))
+                        .addParameter(ParameterSpec.builder(utils.getDtoClassName(packageName, "PaginationRequestDto"), "pageRequest").build())
                         .addStatement("log.debug(\"Executing findAll() method\")")
-                        .addStatement("return repository.findAll().stream().map(mapper::toDTO).toList()")
+                        .addStatement("return repository.findAll(pageRequest.toPageRequest()).map(mapper::toDTO)")
                         .build())
 
                 // Find by ID

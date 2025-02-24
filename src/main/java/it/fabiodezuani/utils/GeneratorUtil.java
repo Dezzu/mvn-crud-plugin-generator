@@ -25,6 +25,11 @@ public class GeneratorUtil {
         return ClassName.get(packageName + ".model", entityName);
     }
 
+    public ClassName getDtoClassName(String packageName, String simpleClassName) throws IOException {
+        return ClassName.get(packageName + ".dto", simpleClassName);
+    }
+
+
     public ClassName getDtoPackage(String packageName, String entityName) throws IOException {
         return ClassName.get(packageName + ".dto", entityName + "Dto");
     }
