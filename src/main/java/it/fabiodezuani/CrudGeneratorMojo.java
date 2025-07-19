@@ -41,6 +41,8 @@ public class CrudGeneratorMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project.basedir}/src/main/java")
     private String outputDir;
+    @Parameter(defaultValue = "false")
+    private boolean overrideFileCreation;
 
     @Parameter(property = "mapper", defaultValue = "MAPSTRUCT")
     private MapperEnum mapper;
@@ -61,7 +63,7 @@ public class CrudGeneratorMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException {
 
-        GeneratorUtil generatorUtil = new GeneratorUtil(outputDir);
+        GeneratorUtil generatorUtil = new GeneratorUtil(outputDir, overrideFileCreation);
         DtoGenerator dtoGenerator = new DtoGenerator(generatorUtil);
         RepositoryGenerator repositoryGenerator = new RepositoryGenerator(generatorUtil);
         ServiceGenerator serviceGenerator = new ServiceGenerator(generatorUtil);

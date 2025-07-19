@@ -12,9 +12,11 @@ import java.nio.file.Paths;
 public class GeneratorUtil {
 
     private String outputDir;
+    private boolean overrideFiles;
 
-    public GeneratorUtil(String outputDir) {
+    public GeneratorUtil(String outputDir, boolean overrideFiles) {
         this.outputDir = outputDir;
+        this.overrideFiles = overrideFiles;
     }
 
     public ClassName getServicePackage(String packageName, String entityName) throws IOException {
@@ -46,9 +48,13 @@ public class GeneratorUtil {
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec).build();
         String packagePath = packageName.replace(".", "/");  // Correctly format the package path
         String fullPath = outputDir + "/" + packagePath;
+        String fileName = fullPath + "/" + typeSpec.name + ".java";
 
-        Files.createDirectories(Paths.get(fullPath));  // Ensure directories exist
-        javaFile.writeTo(new File(outputDir));
+        File file = new File(fileName);
+        if ( !file.exists() || overrideFiles ) {
+            Files.createDirectories(Paths.get(fullPath));  // Ensure directories exist
+            javaFile.writeTo(new File(outputDir));
+        }
     }
 
 }
