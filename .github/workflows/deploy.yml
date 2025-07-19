@@ -3,7 +3,7 @@ name: Deploy to GitHub Packages
 on:
   push:
     tags:
-      - 'v*'
+      - '**'
   workflow_dispatch: # 👈 manual trigger from GitHub Actions UI
 
 jobs:
