@@ -23,5 +23,5 @@ jobs:
       - name: Build & Deploy with Maven
         run: mvn --batch-mode clean deploy --settings .github/settings.xml
         env:
-          GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_PAT }} # or GITHUB_TOKEN if using default GitHub token
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.PACKAGE_TOKEN }} # or GITHUB_TOKEN if using default GitHub token
